@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟APP设计展示</title>
+    <style>
+        /* ===== 基础样式 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f7;
+            color: #333;
+            padding: 40px 20px;
+        }
+        
+        /* 页面标题样式 */
+        .design-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 32px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        
+        /* 设备展示容器 */
+        .designs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+            justify-content: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        /* 单个设备项样式 */
+        .design-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+        
+        /* 设备标签样式 */
+        .design-label {
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        
+        /* iOS设备外观 */
+        .device-container {
+            width: 375px;
+            height: 812px;
+            background-color: white;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            border: 12px solid #1d1d1f;
+        }
+        
+        /* 设备顶部刘海 */
+        .notch {
+            width: 180px;
+            height: 30px;
+            background-color: #1d1d1f;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        
+        /* 状态栏样式 */
+        .status-bar {
+            height: 44px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        
+        /* 应用内容容器 */
+        .app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background-color: #FAFAFA;
+            overflow-y: auto;
+        }
+        
+        /* 底部导航栏 */
+        .bottom-tab-bar {
+            height: 80px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 导航项样式 */
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e8e93;
+        }
+        
+        .tab-item.active {
+            color: #FF6B6B;
+        }
+        
+        /* 导航图标样式 */
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        /* 导航标签文字样式 */
+        .tab-label {
+            font-size: 12px;
+        }
+        
+        /* 响应式布局 */
+        @media (max-width: 768px) {
+            .designs-container {
+                gap: 30px;
+            }
+            
+            .design-item {
+                margin-bottom: 40px;
+            }
+            
+            .design-label {
+                font-size: 18px;
+            }
+            
+            .device-container {
+                width: 320px;
+                height: 690px;
+                border-radius: 36px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .design-title {
+                font-size: 24px;
+                margin-bottom: 30px;
+            }
+            
+            .designs-container {
+                gap: 20px;
+            }
+            
+            .device-container {
+                width: 280px;
+                height: 600px;
+                border-radius: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面标题 -->
+    <h1 class="design-title">番茄时钟 iOS 应用设计</h1>
+    
+    <!-- 设备展示容器 -->
+    <div class="designs-container">
+        <!-- 这里将放置各个设备界面 -->
+        <!-- 第一阶段结束：基础框架已设置完成 -->
+    </div>
+
+    <!-- 第二阶段开始：主计时页面 -->
+    <div class="design-item">
+        <div class="design-label">主页面 - 专注时钟</div>
+        <div class="device-container">
+            <div class="notch"></div>
+            <div class="status-bar">
+                <span>9:41</span>
+                <div style="display: flex; gap: 5px;">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-container">
+                <!-- 计时器区域 -->
+                <div class="timer-circle-container">
+                    <div class="timer-circle">
+                        <div class="timer-display">25:00</div>
+                    </div>
+                    <div class="timer-label">专注时间</div>
+                </div>
+                
+                <!-- 控制按钮 -->
+                <div class="timer-controls">
+                    <div class="control-button reset-button">
+                        <i class="control-icon">↺</i>
+                    </div>
+                    <div class="control-button start-button">
+                        <i class="control-icon">▶️</i>
+                    </div>
+                </div>
+                
+                <!-- 模式切换 -->
+                <div class="timer-mode-selector">
+                    <div class="mode-option active">专注</div>
+                    <div class="mode-option">短休息</div>
+                    <div class="mode-option">长休息</div>
+                </div>
+                
+                <!-- 今日任务预览 -->
+                <div class="tasks-preview">
+                    <div class="section-header">
+                        <div class="section-title">今日任务</div>
+                        <div class="add-button">+</div>
+                    </div>
+                    
+                    <div class="task-item">
+                        <div class="task-checkbox checked"></div>
+                        <div class="task-info">
+                            <div class="task-title">完成设计稿</div>
+                            <div class="task-count">2/4</div>
+                        </div>
+                    </div>
+                    
+                    <div class="task-item">
+                        <div class="task-checkbox"></div>
+                        <div class="task-info">
+                            <div class="task-title">阅读30分钟</div>
+                            <div class="task-count">0/1</div>
+                        </div>
+                    </div>
+                    
+                    <div class="task-item">
+                        <div class="task-checkbox"></div>
+                        <div class="task-info">
+                            <div class="task-title">回复重要邮件</div>
+                            <div class="task-count">0/3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-tab-bar">
+                <div class="tab-item active">
+                    <div class="tab-icon">⏱️</div>
+                    <div class="tab-label">专注</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">📋</div>
+                    <div class="tab-label">任务</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">📊</div>
+                    <div class="tab-label">统计</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">⚙️</div>
+                    <div class="tab-label">设置</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 第二阶段结束：主计时页面 -->
+
+    <!-- 第三阶段开始：任务管理页面 -->
+    <div class="design-item">
+        <div class="design-label">任务管理页面</div>
+        <div class="device-container">
+            <div class="notch"></div>
+            <div class="status-bar">
+                <span>9:41</span>
+                <div style="display: flex; gap: 5px;">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-container">
+                <!-- 页面标题和添加按钮 -->
+                <div class="page-header">
+                    <div class="page-title">我的任务</div>
+                    <div class="add-task-button">+</div>
+                </div>
+                
+                <!-- 日期选择器 -->
+                <div class="date-selector">
+                    <div class="date-item">
+                        <div class="date-day">周一</div>
+                        <div class="date-number">29</div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-day">周二</div>
+                        <div class="date-number">30</div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-day">周三</div>
+                        <div class="date-number">31</div>
+                    </div>
+                    <div class="date-item active">
+                        <div class="date-day">今天</div>
+                        <div class="date-number">1</div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-day">周五</div>
+                        <div class="date-number">2</div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-day">周六</div>
+                        <div class="date-number">3</div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-day">周日</div>
+                        <div class="date-number">4</div>
+                    </div>
+                </div>
+                
+                <!-- 进行中任务区块 -->
+                <div class="task-section">
+                    <div class="section-header">
+                        <div class="section-title">进行中</div>
+                        <div class="view-all">查看全部</div>
+                    </div>
+                    
+                    <div class="task-list">
+                        <div class="task-card">
+                            <div class="task-checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-title">完成设计稿</div>
+                                <div class="task-details">
+                                    <div class="task-time">预计 2 小时</div>
+                                    <div class="task-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 50%;"></div>
+                                        </div>
+                                        <div class="progress-text">2/4</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="task-card">
+                            <div class="task-checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-title">阅读30分钟</div>
+                                <div class="task-details">
+                                    <div class="task-time">预计 30 分钟</div>
+                                    <div class="task-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="progress-text">0/1</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="task-card">
+                            <div class="task-checkbox"></div>
+                            <div class="task-content">
+                                <div class="task-title">回复重要邮件</div>
+                                <div class="task-details">
+                                    <div class="task-time">预计 45 分钟</div>
+                                    <div class="task-progress">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="progress-text">0/3</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 已完成任务区块 -->
+                <div class="task-section">
+                    <div class="section-header">
+                        <div class="section-title">已完成</div>
+                    </div>
+                    
+                    <!-- 完成任务提示 -->
+                    <div class="complete-banner">
+                        <div class="complete-icon">✓</div>
+                        <div class="complete-text">你今天已完成 2 个任务!</div>
+                    </div>
+                    
+                    <div class="task-list">
+                        <div class="task-card completed">
+                            <div class="task-checkbox checked"></div>
+                            <div class="task-content">
+                                <div class="task-title">准备会议材料</div>
+                                <div class="task-details">
+                                    <div class="task-time">用时 1 小时 20 分钟</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="task-card completed">
+                            <div class="task-checkbox checked"></div>
+                            <div class="task-content">
+                                <div class="task-title">健身 45 分钟</div>
+                                <div class="task-details">
+                                    <div class="task-time">用时 45 分钟</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-tab-bar">
+                <div class="tab-item">
+                    <div class="tab-icon">⏱️</div>
+                    <div class="tab-label">专注</div>
+                </div>
+                <div class="tab-item active">
+                    <div class="tab-icon">📋</div>
+                    <div class="tab-label">任务</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">📊</div>
+                    <div class="tab-label">统计</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">⚙️</div>
+                    <div class="tab-label">设置</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 第三阶段结束：任务管理页面 -->
+
+    <!-- 第四阶段开始：统计页面 -->
+    <div class="design-item">
+        <div class="design-label">统计分析页面</div>
+        <div class="device-container">
+            <div class="notch"></div>
+            <div class="status-bar">
+                <span>9:41</span>
+                <div style="display: flex; gap: 5px;">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-container">
+                <!-- 页面标题和周期选择 -->
+                <div class="stats-header">
+                    <div class="page-title">统计</div>
+                    <div class="period-selector">
+                        <div class="period-option">日</div>
+                        <div class="period-option active">周</div>
+                        <div class="period-option">月</div>
+                    </div>
+                </div>
+                
+                <!-- 时间周期指示 -->
+                <div class="period-indicator">
+                    <div class="indicator-arrow left">
+                        <span>◀</span>
+                    </div>
+                    <div class="period-text">4月1日 - 4月7日</div>
+                    <div class="indicator-arrow right">
+                        <span>▶</span>
+                    </div>
+                </div>
+                
+                <!-- 数据总览卡片 -->
+                <div class="stats-overview">
+                    <div class="stats-card">
+                        <div class="stats-value">14</div>
+                        <div class="stats-label">专注次数</div>
+                    </div>
+                    <div class="stats-card highlight">
+                        <div class="stats-value">7.5</div>
+                        <div class="stats-label">专注小时</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-value">11</div>
+                        <div class="stats-label">完成任务</div>
+                    </div>
+                </div>
+                
+                <!-- 每日专注时间图表 -->
+                <div class="stats-chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">每日专注时间</div>
+                        <div class="chart-average">平均: 1.1小时/天</div>
+                    </div>
+                    
+                    <div class="daily-chart">
+                        <div class="chart-column">
+                            <div class="column-bar" style="height: 35%;">
+                                <div class="time-tooltip">0.8h</div>
+                            </div>
+                            <div class="column-label">一</div>
+                        </div>
+                        <div class="chart-column">
+                            <div class="column-bar" style="height: 70%;">
+                                <div class="time-tooltip">1.6h</div>
+                            </div>
+                            <div class="column-label">二</div>
+                        </div>
+                        <div class="chart-column">
+                            <div class="column-bar" style="height: 55%;">
+                                <div class="time-tooltip">1.2h</div>
+                            </div>
+                            <div class="column-label">三</div>
+                        </div>
+                        <div class="chart-column">
+                            <div class="column-bar" style="height: 100%;">
+                                <div class="time-tooltip">2.3h</div>
+                            </div>
+                            <div class="column-label">四</div>
+                        </div>
+                        <div class="chart-column today">
+                            <div class="column-bar" style="height: 25%;">
+                                <div class="time-tooltip">0.6h</div>
+                            </div>
+                            <div class="column-label">五</div>
+                        </div>
+                        <div class="chart-column">
+                            <div class="column-bar" style="height: 45%;">
+                                <div class="time-tooltip">1.0h</div>
+                            </div>
+                            <div class="column-label">六</div>
+                        </div>
+                        <div class="chart-column">
+                            <div class="column-bar" style="height: 0%;">
+                                <div class="time-tooltip">0h</div>
+                            </div>
+                            <div class="column-label">日</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 专注类别分布 -->
+                <div class="stats-chart-card">
+                    <div class="chart-title">专注类别分布</div>
+                    
+                    <div class="category-chart">
+                        <div class="pie-chart-container">
+                            <div class="pie-chart"></div>
+                        </div>
+                        
+                        <div class="category-legend">
+                            <div class="legend-item">
+                                <div class="legend-color work"></div>
+                                <div class="legend-label">工作</div>
+                                <div class="legend-value">45%</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color study"></div>
+                                <div class="legend-label">学习</div>
+                                <div class="legend-value">30%</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color reading"></div>
+                                <div class="legend-label">阅读</div>
+                                <div class="legend-value">15%</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color other"></div>
+                                <div class="legend-label">其他</div>
+                                <div class="legend-value">10%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 历史最佳记录 -->
+                <div class="stats-record-card">
+                    <div class="record-header">
+                        <div class="record-title">个人记录</div>
+                    </div>
+                    
+                    <div class="record-item">
+                        <div class="record-icon">🏆</div>
+                        <div class="record-info">
+                            <div class="record-label">单日最长专注</div>
+                            <div class="record-value">4月4日 · 2.3小时</div>
+                        </div>
+                    </div>
+                    
+                    <div class="record-item">
+                        <div class="record-icon">🔥</div>
+                        <div class="record-info">
+                            <div class="record-label">连续专注天数</div>
+                            <div class="record-value">6天</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-tab-bar">
+                <div class="tab-item">
+                    <div class="tab-icon">⏱️</div>
+                    <div class="tab-label">专注</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">📋</div>
+                    <div class="tab-label">任务</div>
+                </div>
+                <div class="tab-item active">
+                    <div class="tab-icon">📊</div>
+                    <div class="tab-label">统计</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">⚙️</div>
+                    <div class="tab-label">设置</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 第四阶段结束：统计页面 -->
+
+    <!-- 第五阶段开始：设置页面 -->
+    <div class="design-item">
+        <div class="design-label">设置页面</div>
+        <div class="device-container">
+            <div class="notch"></div>
+            <div class="status-bar">
+                <span>9:41</span>
+                <div style="display: flex; gap: 5px;">
+                    <span>📶</span>
+                    <span>📡</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+            
+            <div class="app-container">
+                <!-- 页面标题 -->
+                <div class="page-header">
+                    <div class="page-title">设置</div>
+                </div>
+                
+                <!-- 用户信息卡片 -->
+                <div class="user-card">
+                    <div class="user-avatar">
+                        <span>😊</span>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">番茄达人</div>
+                        <div class="user-status">专注使用 23 天</div>
+                    </div>
+                    <div class="user-action">
+                        <div class="action-icon">›</div>
+                    </div>
+                </div>
+                
+                <!-- 专注设置组 -->
+                <div class="settings-group">
+                    <div class="settings-group-header">专注设置</div>
+                    
+                    <div class="settings-card">
+                        <div class="settings-item">
+                            <div class="setting-label">专注时长</div>
+                            <div class="setting-value">
+                                <span>25分钟</span>
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">短休息时长</div>
+                            <div class="setting-value">
+                                <span>5分钟</span>
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">长休息时长</div>
+                            <div class="setting-value">
+                                <span>15分钟</span>
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">自动开始休息</div>
+                            <div class="setting-value">
+                                <div class="toggle-switch active"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">自动开始下一个专注</div>
+                            <div class="setting-value">
+                                <div class="toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 通知设置组 -->
+                <div class="settings-group">
+                    <div class="settings-group-header">通知设置</div>
+                    
+                    <div class="settings-card">
+                        <div class="settings-item">
+                            <div class="setting-label">声音提醒</div>
+                            <div class="setting-value">
+                                <div class="toggle-switch active"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">震动</div>
+                            <div class="setting-value">
+                                <div class="toggle-switch active"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">专注完成通知</div>
+                            <div class="setting-value">
+                                <div class="toggle-switch active"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">每日提醒</div>
+                            <div class="setting-value">
+                                <span>9:00 AM</span>
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 外观设置组 -->
+                <div class="settings-group">
+                    <div class="settings-group-header">外观设置</div>
+                    
+                    <div class="settings-card">
+                        <div class="settings-item">
+                            <div class="setting-label">主题</div>
+                            <div class="setting-value">
+                                <span>番茄红</span>
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">深色模式</div>
+                            <div class="setting-value">
+                                <span>跟随系统</span>
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">专注时显示秒数</div>
+                            <div class="setting-value">
+                                <div class="toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数据与隐私设置组 -->
+                <div class="settings-group">
+                    <div class="settings-group-header">数据与隐私</div>
+                    
+                    <div class="settings-card">
+                        <div class="settings-item">
+                            <div class="setting-label">iCloud同步</div>
+                            <div class="setting-value">
+                                <div class="toggle-switch active"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">导出数据</div>
+                            <div class="setting-value">
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item dangerous">
+                            <div class="setting-label">清除所有数据</div>
+                            <div class="setting-value">
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 关于设置组 -->
+                <div class="settings-group">
+                    <div class="settings-card">
+                        <div class="settings-item">
+                            <div class="setting-label">关于</div>
+                            <div class="setting-value">
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">帮助与反馈</div>
+                            <div class="setting-value">
+                                <div class="chevron-icon">›</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="setting-label">应用版本</div>
+                            <div class="setting-value">
+                                <span>1.0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-tab-bar">
+                <div class="tab-item">
+                    <div class="tab-icon">⏱️</div>
+                    <div class="tab-label">专注</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">📋</div>
+                    <div class="tab-label">任务</div>
+                </div>
+                <div class="tab-item">
+                    <div class="tab-icon">📊</div>
+                    <div class="tab-label">统计</div>
+                </div>
+                <div class="tab-item active">
+                    <div class="tab-icon">⚙️</div>
+                    <div class="tab-label">设置</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 第五阶段结束：设置页面 -->
+</body>
+</html>
+
+<style>
+    /* 第二阶段样式：主计时页面样式 */
+    
+    /* 计时器容器 */
+    .timer-circle-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    
+    /* 计时器圆环 */
+    .timer-circle {
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        box-shadow: 0 10px 25px rgba(255, 107, 107, 0.15);
+    }
+    
+    /* 计时器环形进度 */
+    .timer-circle::before {
+        content: '';
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        border: 10px solid #f5f5f5;
+    }
+    
+    .timer-circle::after {
+        content: '';
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        border: 10px solid transparent;
+        border-top: 10px solid #FF6B6B;
+        border-right: 10px solid #FF6B6B;
+        transform: rotate(45deg);
+    }
+    
+    /* 计时器时间显示 */
+    .timer-display {
+        font-size: 56px;
+        font-weight: 700;
+        color: #333;
+        z-index: 2;
+    }
+    
+    /* 计时器标签 */
+    .timer-label {
+        font-size: 18px;
+        color: #777;
+        margin-top: 12px;
+    }
+    
+    /* 控制按钮区域 */
+    .timer-controls {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        margin-bottom: 30px;
+    }
+    
+    /* 控制按钮样式 */
+    .control-button {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+    
+    .control-button:active {
+        transform: scale(0.95);
+    }
+    
+    /* 重置按钮 */
+    .reset-button {
+        background-color: #6c757d;
+        color: white;
+    }
+    
+    /* 开始按钮 */
+    .start-button {
+        background-color: #FF6B6B;
+        color: white;
+    }
+    
+    /* 控制图标 */
+    .control-icon {
+        font-size: 24px;
+        font-style: normal;
+    }
+    
+    /* 模式选择器 */
+    .timer-mode-selector {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 35px;
+    }
+    
+    /* 模式选项 */
+    .mode-option {
+        padding: 10px 18px;
+        border-radius: 20px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #777;
+        background-color: white;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .mode-option.active {
+        background-color: #FFE0E0;
+        color: #FF6B6B;
+        font-weight: 600;
+    }
+    
+    /* 任务预览区 */
+    .tasks-preview {
+        margin-top: 20px;
+    }
+    
+    /* 区块标题栏 */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    /* 区块标题 */
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    /* 添加按钮 */
+    .add-button {
+        width: 28px;
+        height: 28px;
+        background-color: #f0f0f0;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #FF6B6B;
+        font-size: 20px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    /* 任务项 */
+    .task-item {
+        padding: 16px;
+        background-color: white;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* 任务复选框 */
+    .task-checkbox {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        margin-right: 15px;
+        flex-shrink: 0;
+        position: relative;
+    }
+    
+    .task-checkbox.checked {
+        background-color: #FF6B6B;
+        border-color: #FF6B6B;
+    }
+    
+    .task-checkbox.checked::after {
+        content: '✓';
+        position: absolute;
+        color: white;
+        font-size: 14px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    /* 任务信息 */
+    .task-info {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* 任务标题 */
+    .task-title {
+        font-size: 16px;
+        color: #333;
+    }
+    
+    /* 任务计数 */
+    .task-count {
+        font-size: 14px;
+        color: #999;
+    }
+
+    /* 第三阶段样式：任务管理页面样式 */
+    
+    /* 页面标题区域 */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+    
+    /* 页面标题 */
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+    }
+    
+    /* 添加任务按钮 */
+    .add-task-button {
+        width: 36px;
+        height: 36px;
+        background-color: #FF6B6B;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 22px;
+        box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+        cursor: pointer;
+    }
+    
+    /* 日期选择器 */
+    .date-selector {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+        scrollbar-width: none; /* 隐藏滚动条 */
+    }
+    
+    .date-selector::-webkit-scrollbar {
+        display: none; /* Chrome & Safari */
+    }
+    
+    /* 日期项 */
+    .date-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 15px;
+        padding: 12px;
+        border-radius: 15px;
+        min-width: 60px;
+        transition: background-color 0.2s ease;
+    }
+    
+    .date-item.active {
+        background-color: #FFE0E0;
+    }
+    
+    /* 日期文本 - 星期 */
+    .date-day {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 5px;
+    }
+    
+    /* 日期文本 - 日期数字 */
+    .date-number {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .date-item.active .date-number {
+        color: #FF6B6B;
+    }
+    
+    /* 任务区块 */
+    .task-section {
+        margin-bottom: 30px;
+    }
+    
+    /* 查看全部链接 */
+    .view-all {
+        font-size: 14px;
+        color: #FF6B6B;
+        cursor: pointer;
+    }
+    
+    /* 任务列表 */
+    .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    /* 任务卡片 */
+    .task-card {
+        padding: 18px;
+        background-color: white;
+        border-radius: 16px;
+        display: flex;
+        align-items: flex-start;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+    }
+    
+    .task-card:active {
+        transform: scale(0.98);
+    }
+    
+    /* 已完成任务卡片样式 */
+    .task-card.completed {
+        background-color: #fafafa;
+        opacity: 0.8;
+    }
+    
+    /* 任务内容区域 */
+    .task-content {
+        flex: 1;
+        margin-left: 15px;
+    }
+    
+    /* 任务详情 */
+    .task-details {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* 任务时间文本 */
+    .task-time {
+        font-size: 14px;
+        color: #999;
+    }
+    
+    /* 任务进度区域 */
+    .task-progress {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    /* 进度条 */
+    .progress-bar {
+        width: 80px;
+        height: 6px;
+        background-color: #f0f0f0;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    
+    /* 进度填充 */
+    .progress-fill {
+        height: 100%;
+        background-color: #FF6B6B;
+        border-radius: 3px;
+    }
+    
+    /* 进度文本 */
+    .progress-text {
+        font-size: 12px;
+        color: #999;
+    }
+    
+    /* 完成任务提示横幅 */
+    .complete-banner {
+        display: flex;
+        align-items: center;
+        background-color: #E8F5E9;
+        padding: 15px;
+        border-radius: 16px;
+        margin-bottom: 15px;
+    }
+    
+    /* 完成图标 */
+    .complete-icon {
+        width: 36px;
+        height: 36px;
+        background-color: #4CAF50;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 18px;
+        margin-right: 12px;
+    }
+    
+    /* 完成文本 */
+    .complete-text {
+        font-size: 16px;
+        color: #2E7D32;
+    }
+
+    /* 第四阶段样式：统计页面样式 */
+    
+    /* 统计页面标题区域 */
+    .stats-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    /* 周期选择器 */
+    .period-selector {
+        display: flex;
+        background-color: #F0F0F0;
+        border-radius: 20px;
+        padding: 3px;
+    }
+    
+    /* 周期选项 */
+    .period-option {
+        padding: 8px 15px;
+        border-radius: 17px;
+        font-size: 14px;
+        color: #777;
+        cursor: pointer;
+    }
+    
+    .period-option.active {
+        background-color: white;
+        color: #FF6B6B;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* 周期指示器 */
+    .period-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+    
+    /* 周期文本 */
+    .period-text {
+        font-size: 16px;
+        color: #555;
+        margin: 0 15px;
+    }
+    
+    /* 指示箭头 */
+    .indicator-arrow {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #F6F6F6;
+        color: #999;
+        cursor: pointer;
+    }
+    
+    /* 数据总览区域 */
+    .stats-overview {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+    }
+    
+    /* 数据卡片 */
+    .stats-card {
+        flex: 1;
+        background-color: white;
+        border-radius: 16px;
+        padding: 16px 12px;
+        text-align: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        margin: 0 6px;
+    }
+    
+    /* 高亮数据卡片 */
+    .stats-card.highlight {
+        background-color: #FF6B6B;
+        color: white;
+    }
+    
+    /* 数据值 */
+    .stats-value {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    /* 数据标签 */
+    .stats-label {
+        font-size: 13px;
+        color: inherit;
+        opacity: 0.8;
+    }
+    
+    /* 图表卡片 */
+    .stats-chart-card {
+        background-color: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* 图表标题区域 */
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    /* 图表标题 */
+    .chart-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    /* 平均值文本 */
+    .chart-average {
+        font-size: 14px;
+        color: #999;
+    }
+    
+    /* 每日图表 */
+    .daily-chart {
+        display: flex;
+        height: 200px;
+        align-items: flex-end;
+        padding-top: 25px;
+        justify-content: space-between;
+    }
+    
+    /* 图表柱 */
+    .chart-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 12%;
+        height: 100%;
+    }
+    
+    /* 今日柱子 */
+    .chart-column.today .column-bar {
+        background-color: #FFE0E0;
+    }
+    
+    .chart-column.today .column-label {
+        color: #FF6B6B;
+    }
+    
+    /* 柱子样式 */
+    .column-bar {
+        width: 100%;
+        background-color: #FF6B6B;
+        border-radius: 6px 6px 0 0;
+        position: relative;
+        max-height: 100%;
+        transition: height 0.5s ease;
+    }
+    
+    /* 时间提示 */
+    .time-tooltip {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        color: #777;
+    }
+    
+    /* 柱子标签 */
+    .column-label {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #999;
+    }
+    
+    /* 饼图容器 */
+    .category-chart {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+    }
+    
+    /* 饼图 */
+    .pie-chart-container {
+        width: 130px;
+        height: 130px;
+        margin-right: 20px;
+        position: relative;
+    }
+    
+    /* 饼图实现 */
+    .pie-chart {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(
+            #FF6B6B 0% 45%, 
+            #4CAF50 45% 75%, 
+            #2196F3 75% 90%, 
+            #FFC107 90% 100%
+        );
+        position: relative;
+    }
+    
+    /* 饼图中心空白 */
+    .pie-chart::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60px;
+        height: 60px;
+        background-color: white;
+        border-radius: 50%;
+    }
+    
+    /* 图例区域 */
+    .category-legend {
+        flex: 1;
+    }
+    
+    /* 图例项 */
+    .legend-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    
+    /* 图例颜色块 */
+    .legend-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        margin-right: 10px;
+    }
+    
+    .legend-color.work { background-color: #FF6B6B; }
+    .legend-color.study { background-color: #4CAF50; }
+    .legend-color.reading { background-color: #2196F3; }
+    .legend-color.other { background-color: #FFC107; }
+    
+    /* 图例标签 */
+    .legend-label {
+        flex: 1;
+        font-size: 14px;
+        color: #555;
+    }
+    
+    /* 图例值 */
+    .legend-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    /* 记录卡片 */
+    .stats-record-card {
+        background-color: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* 记录标题 */
+    .record-header {
+        margin-bottom: 15px;
+    }
+    
+    .record-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    /* 记录项 */
+    .record-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .record-item:last-child {
+        border-bottom: none;
+    }
+    
+    /* 记录图标 */
+    .record-icon {
+        font-size: 20px;
+        margin-right: 15px;
+    }
+    
+    /* 记录信息 */
+    .record-info {
+        flex: 1;
+    }
+    
+    /* 记录标签 */
+    .record-label {
+        font-size: 15px;
+        color: #555;
+        margin-bottom: 4px;
+    }
+    
+    /* 记录值 */
+    .record-value {
+        font-size: 14px;
+        color: #999;
+    }
+
+    /* 第五阶段样式：设置页面样式 */
+    
+    /* 用户卡片 */
+    .user-card {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* 用户头像 */
+    .user-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #FFE0E0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 15px;
+        font-size: 30px;
+    }
+    
+    /* 用户信息 */
+    .user-info {
+        flex: 1;
+    }
+    
+    /* 用户名 */
+    .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    /* 用户状态 */
+    .user-status {
+        font-size: 14px;
+        color: #999;
+    }
+    
+    /* 用户操作区 */
+    .user-action {
+        padding: 10px;
+    }
+    
+    /* 操作图标 */
+    .action-icon {
+        color: #999;
+        font-size: 20px;
+    }
+    
+    /* 设置组 */
+    .settings-group {
+        margin-bottom: 25px;
+    }
+    
+    /* 设置组标题 */
+    .settings-group-header {
+        font-size: 16px;
+        color: #777;
+        margin-bottom: 10px;
+        padding-left: 5px;
+    }
+    
+    /* 设置卡片 */
+    .settings-card {
+        background-color: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    /* 设置项 */
+    .settings-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .settings-item:last-child {
+        border-bottom: none;
+    }
+    
+    /* 危险设置项 */
+    .settings-item.dangerous .setting-label {
+        color: #F44336;
+    }
+    
+    /* 设置标签 */
+    .setting-label {
+        font-size: 16px;
+        color: #333;
+    }
+    
+    /* 设置值容器 */
+    .setting-value {
+        display: flex;
+        align-items: center;
+    }
+    
+    /* 设置值文本 */
+    .setting-value span {
+        color: #999;
+        margin-right: 10px;
+    }
+    
+    /* 箭头图标 */
+    .chevron-icon {
+        color: #ccc;
+        font-size: 18px;
+    }
+    
+    /* 开关控件 */
+    .toggle-switch {
+        width: 50px;
+        height: 30px;
+        background-color: #e0e0e0;
+        border-radius: 15px;
+        position: relative;
+        transition: background-color 0.2s ease;
+    }
+    
+    .toggle-switch::before {
+        content: '';
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background-color: white;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .toggle-switch.active {
+        background-color: #FF6B6B;
+    }
+    
+    .toggle-switch.active::before {
+        transform: translateX(20px);
+    }
+</style>

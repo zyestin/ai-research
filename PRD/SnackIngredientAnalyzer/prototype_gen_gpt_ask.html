@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>零食配料表智能分析器 - 原型设计</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: "SF Pro Display", "PingFang SC", Arial, sans-serif;
+      background: #f7f8fa;
+      color: #222;
+    }
+    .app-header {
+      background: linear-gradient(90deg, #4f8cff 0%, #38cfa6 100%);
+      color: #fff;
+      padding: 32px 0 16px 0;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+    }
+    .container {
+      max-width: 400px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      padding: 24px 20px 32px 20px;
+    }
+    .upload-section {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .upload-icon {
+      font-size: 48px;
+      color: #4f8cff;
+      margin-bottom: 8px;
+    }
+    .upload-btn {
+      background: #4f8cff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .upload-btn:hover {
+      background: #38cfa6;
+    }
+    .result-section {
+      margin-top: 24px;
+      background: #f2f7ff;
+      border-radius: 12px;
+      padding: 18px 14px;
+      min-height: 120px;
+      box-sizing: border-box;
+    }
+    .result-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #4f8cff;
+      margin-bottom: 8px;
+    }
+    .ingredient-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .ingredient-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    .icon-safe {
+      color: #38cfa6;
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+    .icon-warning {
+      color: #ffb300;
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+    .icon-danger {
+      color: #ff4f4f;
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+    .explain-section {
+      margin-top: 18px;
+      background: #fffbe6;
+      border-radius: 8px;
+      padding: 12px 10px;
+      font-size: 0.98rem;
+      color: #b07d00;
+    }
+    .footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.95rem;
+      margin-top: 32px;
+    }
+  </style>
+  <!-- 使用iconfont或emoji做简单icon -->
+</head>
+<body>
+  <div class="app-header">
+    零食配料表智能分析器
+  </div>
+  <div class="container">
+    <div class="upload-section">
+      <div class="upload-icon">📷</div>
+      <div>拍照或上传零食配料表</div>
+      <button class="upload-btn">上传图片</button>
+    </div>
+    <div class="result-section">
+      <div class="result-title">分析结果</div>
+      <ul class="ingredient-list">
+        <li class="ingredient-item"><span class="icon-safe">✅</span> 白砂糖</li>
+        <li class="ingredient-item"><span class="icon-warning">⚠️</span> 柠檬酸钠 <span style="margin-left:8px;color:#ffb300;">（建议适量）</span></li>
+        <li class="ingredient-item"><span class="icon-danger">⛔</span> 人工色素（E102）<span style="margin-left:8px;color:#ff4f4f;">（不推荐儿童食用）</span></li>
+      </ul>
+      <div class="explain-section">
+        <b>人工色素（E102）</b>：可能引发儿童多动症等健康问题，欧盟已限制使用。<br>
+        <b>柠檬酸钠</b>：常见食品添加剂，适量摄入一般安全。
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    © 2024 零食配料表智能分析器
+  </div>
+</body>
+</html>

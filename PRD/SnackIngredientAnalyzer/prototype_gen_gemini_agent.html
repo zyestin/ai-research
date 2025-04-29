@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>零食成分分析器 - 原型</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f5; /* Light grey background */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align items to the top */
+            min-height: 100vh;
+            padding-top: 20px; /* Add some top padding */
+        }
+
+        .iphone-frame {
+            width: 375px; /* iPhone 8 width */
+            height: 667px; /* iPhone 8 height */
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background-color: #fff; /* White screen background */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-bar {
+            height: 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 12px;
+            color: #555;
+            border-bottom: 1px solid #eee;
+        }
+        .status-bar .time { font-weight: 600; }
+        .status-bar .signals { display: flex; align-items: center; gap: 5px; }
+        .status-bar .signals span { /* Placeholder for icons */ }
+
+        .app-screen {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: none; /* Hide screens by default */
+        }
+
+        .app-screen.active {
+            display: block; /* Show active screen */
+        }
+
+        /* --- Home Screen Styles --- */
+        #home-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%; /* Make it take full height */
+        }
+
+        .logo {
+            font-size: 48px; /* Placeholder for logo icon */
+            margin-bottom: 15px;
+            color: #4CAF50; /* Green accent */
+        }
+
+        .app-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .app-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .camera-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        .camera-button:hover { background-color: #45a049; }
+
+        .gallery-button {
+            background-color: #e0e0e0; /* Light grey */
+            color: #333;
+        }
+        .gallery-button:hover { background-color: #d5d5d5; }
+
+        .action-button i { /* Placeholder for icons */
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+
+        /* --- Result Screen Styles --- */
+        #result-screen .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .result-summary {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-summary.safe { background-color: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; } /* Green - Safe */
+        .result-summary.caution { background-color: #fff3e0; border: 1px solid #ffcc80; color: #ef6c00; } /* Orange - Caution */
+        .result-summary.unsafe { background-color: #ffebee; border: 1px solid #ef9a9a; color: #c62828; } /* Red - Unsafe */
+
+        .result-summary .icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        .result-summary .title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+         .result-summary .message {
+            font-size: 14px;
+        }
+
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .compliance-section { margin-bottom: 20px; }
+
+        .compliance-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .compliance-item .status-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        .compliance-item .status-icon.pass { color: #4CAF50; } /* Green */
+        .compliance-item .status-icon.fail { color: #f44336; } /* Red */
+        .compliance-item .status-icon.unknown { color: #999; } /* Grey */
+        .compliance-item .text { font-size: 15px; }
+
+
+        .ingredients-list { list-style: none; padding: 0; margin: 0; }
+        .ingredients-list li {
+            padding: 10px 5px;
+            border-bottom: 1px solid #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+        }
+        .ingredients-list li:last-child { border-bottom: none; }
+
+        .ingredient-name { flex-grow: 1; }
+        .ingredient-tag {
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        .ingredient-tag.risk { background-color: #ffebee; color: #c62828; } /* Red */
+        .ingredient-tag.caution { background-color: #fff3e0; color: #ef6c00; } /* Orange */
+        .ingredient-tag.info { background-color: #e3f2fd; color: #1565c0; } /* Blue */
+
+        .details-link {
+            color: #1976D2; /* Blue link */
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer; /* Indicate interactivity */
+        }
+        .details-link:hover { text-decoration: underline; }
+
+
+        .feedback-section {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+        }
+        .feedback-link {
+            color: #1976D2;
+            text-decoration: none;
+        }
+        .feedback-link:hover { text-decoration: underline; }
+
+        /* Simple Navigation (for prototype only) */
+        .nav-button {
+            background-color: #777;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+    </style>
+    <!-- Using placeholder icons - replace with actual icon library like FontAwesome if needed -->
+</head>
+<body>
+
+    <div class="iphone-frame">
+        <div class="status-bar">
+            <span class="time">9:41 AM</span>
+            <span class="signals">
+                <span>📶</span> <!-- Wifi Icon -->
+                <span>🔋</span> <!-- Battery Icon -->
+            </span>
+        </div>
+
+        <!-- Home Screen -->
+        <div id="home-screen" class="app-screen active">
+             <div class="logo">🌿</div> <!-- Placeholder Leaf Icon -->
+            <div class="app-title">零食成分分析器</div>
+            <div class="app-subtitle">拍照分析，守护孩子健康</div>
+
+            <button class="action-button camera-button" onclick="showScreen('result-screen')">
+                <i>📷</i> <!-- Placeholder Camera Icon -->
+                拍配料表
+            </button>
+            <button class="action-button gallery-button" onclick="showScreen('result-screen')">
+                <i>🖼️</i> <!-- Placeholder Gallery Icon -->
+                从相册选图
+            </button>
+            <!-- In a real app, these buttons would trigger camera/gallery -->
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="app-screen">
+            <div class="header">
+                <button class="nav-button" onclick="showScreen('home-screen')" style="float: left;">返回</button>
+                <!-- Title could be dynamic -->
+                <h3>分析结果</h3>
+            </div>
+
+            <!-- Example: Caution Result -->
+            <div class="result-summary caution">
+                <div class="icon">⚠️</div> <!-- Caution Icon -->
+                <div class="title">谨慎给儿童食用</div>
+                <div class="message">检测到 2 项风险成分，不符合欧盟标准</div>
+            </div>
+
+             <!-- Example: Safe Result (Commented out)
+            <div class="result-summary safe">
+                <div class="icon">✅</div>
+                <div class="title">适合儿童食用</div>
+                <div class="message">符合欧盟标准，未发现风险成分</div>
+            </div>
+             -->
+
+            <div class="compliance-section">
+                <div class="section-title">合规性检查</div>
+                <div class="compliance-item">
+                    <span class="status-icon pass">✔️</span> <!-- Check Icon -->
+                    <span class="text">符合中国国家标准 (GB)</span>
+                </div>
+                <div class="compliance-item">
+                    <span class="status-icon fail">❌</span> <!-- Cross Icon -->
+                    <span class="text">不符合欧盟标准 (EU)</span>
+                </div>
+                 <div class="compliance-item">
+                    <span class="status-icon unknown">❓</span> <!-- Question Icon -->
+                    <span class="text">日本标准 (JP) - 未检测</span>
+                </div>
+            </div>
+
+
+            <div class="ingredients-section">
+                <div class="section-title">成分列表</div>
+                <ul class="ingredients-list">
+                    <li>
+                        <span class="ingredient-name">白砂糖</span>
+                        <span class="ingredient-tag caution">高糖</span>
+                        <a href="#" class="details-link">详情</a>
+                    </li>
+                     <li>
+                        <span class="ingredient-name">食用盐</span>
+                         <span class="ingredient-tag caution">高钠</span>
+                         <a href="#" class="details-link">详情</a>
+                    </li>
+                    <li>
+                        <span class="ingredient-name">全脂奶粉</span>
+                         <a href="#" class="details-link">详情</a>
+                    </li>
+                    <li>
+                        <span class="ingredient-name">柠檬黄 (E102)</span>
+                        <span class="ingredient-tag risk">风险成分</span>
+                        <span class="ingredient-tag info">欧标禁用</span>
+                        <a href="#" class="details-link">详情</a>
+                    </li>
+                    <li>
+                        <span class="ingredient-name">日落黄 (E110)</span>
+                        <span class="ingredient-tag risk">风险成分</span>
+                         <a href="#" class="details-link">详情</a>
+                    </li>
+                     <li>
+                        <span class="ingredient-name">维生素C</span>
+                         <a href="#" class="details-link">详情</a>
+                    </li>
+                    <!-- Add more ingredients as needed -->
+                </ul>
+            </div>
+
+            <div class="feedback-section">
+                分析结果仅供参考。 <a href="#" class="feedback-link">识别有误或分析不对？</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.app-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            // Show the target screen
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Initially show the home screen
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen('home-screen');
+        });
+    </script>
+
+</body>
+</html> 

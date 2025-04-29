@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>零食配料表智能分析器 - 原型设计</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "SF Pro Display", "PingFang SC", Arial, sans-serif;
+      background: #f7f8fa;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .app-header {
+      background: linear-gradient(90deg, #6ec1e4 0%, #4a90e2 100%);
+      color: #fff;
+      padding: 32px 0 24px 0;
+      text-align: center;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 2px 8px rgba(74,144,226,0.08);
+    }
+    .app-header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+    }
+    .upload-section {
+      margin: 32px auto 0 auto;
+      width: 90%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .icon-upload {
+      font-size: 48px;
+      color: #4a90e2;
+      margin-bottom: 12px;
+    }
+    .upload-btn {
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1.1rem;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .upload-btn:hover {
+      background: #357ab8;
+    }
+    .result-section {
+      margin: 32px auto 0 auto;
+      width: 90%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 24px 20px;
+    }
+    .result-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #4a90e2;
+    }
+    .ingredient-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px 0;
+    }
+    .ingredient-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ingredient-bad {
+      color: #e94f4f;
+      font-weight: bold;
+      background: #ffeaea;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.95em;
+    }
+    .ingredient-good {
+      color: #4a90e2;
+      font-weight: bold;
+      background: #eaf6ff;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.95em;
+    }
+    .rating {
+      margin: 16px 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #222;
+    }
+    .rating.recommend { color: #4a90e2; }
+    .rating.caution { color: #f5a623; }
+    .rating.avoid { color: #e94f4f; }
+    .explain-section {
+      background: #f7f8fa;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 0.98rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.95rem;
+      margin: 40px 0 12px 0;
+    }
+  </style>
+  <!-- 使用iconfont或svg可替换下方emoji -->
+</head>
+<body>
+  <div class="app-header">
+    <h1>零食配料表智能分析器</h1>
+    <div style="font-size:1.1rem;margin-top:8px;">拍照上传，秒懂成分</div>
+  </div>
+
+  <div class="upload-section">
+    <div class="icon-upload">📷</div>
+    <div>上传或拍摄零食配料表</div>
+    <button class="upload-btn">选择图片</button>
+    <div style="color:#aaa;font-size:0.95rem;margin-top:8px;">支持多语言配料表</div>
+  </div>
+
+  <div class="result-section">
+    <div class="result-title">分析结果</div>
+    <ul class="ingredient-list">
+      <li>白砂糖 <span class="ingredient-good">安全</span></li>
+      <li>柠檬酸 <span class="ingredient-good">安全</span></li>
+      <li>山梨酸钾 <span class="ingredient-bad">不推荐</span></li>
+      <li>苯甲酸钠 <span class="ingredient-bad">不推荐</span></li>
+    </ul>
+    <div class="rating recommend">健康评级：推荐</div>
+    <div class="explain-section">
+      <b>山梨酸钾：</b>常用防腐剂，部分研究显示对儿童健康有潜在影响，欧盟标准限制使用。
+    </div>
+    <div class="explain-section">
+      <b>苯甲酸钠：</b>防腐剂，过量摄入可能影响儿童神经系统，建议避免。
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2024 零食配料表智能分析器<br>
+    <span style="font-size:0.9em;">健康选零食，守护每一口</span>
+  </div>
+</body>
+</html>
