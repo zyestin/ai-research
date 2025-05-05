@@ -279,22 +279,50 @@
 
 #### 7.2 埋点需求 (Tracking Points)
 
-*   **粉丝端:**
-    *   互动功能各入口点击次数 (PV/UV)。
-    *   互动信息流页面浏览 (PV/UV)、停留时长。
-    *   信息流内容点击、点赞、评论、分享次数。
-    *   "向我提问"按钮点击次数。
-    *   提问页面打开次数、提交成功次数、提交失败次数。
-    *   选择"公开/私密"提问的次数分布。
-    *   收到回复通知的点击率。
-*   **后台管理端:**
-    *   互动管理模块访问次数 (PV/UV)。
-    *   问题列表筛选/排序使用次数。
-    *   问题"回复"、"设为公开/私密"、"忽略"、"删除"操作次数。
-    *   主动发起"话题"、"动态"、"投票"次数。
-    *   内容"编辑"、"删除"、"置顶"操作次数。
-    *   评论"精选"、"删除"操作次数。
-    *   用户"禁言"、"移出黑名单"操作次数。
+*(注意：以下为初步埋点设计，具体事件名、参数名和值可能需要与开发和数据同学进一步确认)*
+
+**粉丝端埋点 (Client-Side Tracking)**
+
+| 要统计的事件说明                      | 事件名 (Event Name)              | 参数说明 (Parameter Description)          | 参数值 (Example Value)                                  |
+| ------------------------------------- | ------------------------------- | ----------------------------------------- | ------------------------------------------------------- |
+| 互动功能各入口点击次数 (PV/UV)        | `click_interaction_entry`       | `entry_point`: 点击的入口位置             | `menu`, `article_bottom`, `profile_card`                  |
+| 互动信息流页面浏览 (PV/UV)            | `view_interaction_feed`         | `duration_ms`: 页面停留时长 (毫秒)          | `15300`                                                 |
+|                                       |                                 | `trigger_source`: 进入页面的来源 (可选)     | `menu`, `article_bottom`, `profile_card`, `notification`  |
+| 信息流内容点击次数                    | `click_feed_item`               | `item_id`: 点击的内容 ID                  | `qa_123`, `topic_456`, `post_789`, `vote_101`            |
+|                                       |                                 | `item_type`: 点击的内容类型                 | `qa`, `topic`, `post`, `vote`                           |
+| 信息流内容操作次数 (点赞/评论/分享) | `action_feed_item`              | `item_id`: 操作的内容 ID                  | `qa_123`, `topic_456`                                     |
+|                                       |                                 | `item_type`: 操作的内容类型                 | `qa`, `topic`, `post`, `vote`                           |
+|                                       |                                 | `action_type`: 操作类型                   | `like`, `unlike`, `comment`, `share`                      |
+| “向我提问”按钮点击次数                | `click_ask_question_button`     | -                                         | -                                                       |
+| 提问页面打开次数/停留时长             | `view_ask_question_page`        | `duration_ms`: 提问页面停留时长 (毫秒)      | `8500`                                                  |
+| 提问提交次数 (成功/失败)            | `submit_question`               | `question_id`: 提交成功后的问题 ID (若有) | `q_abc`                                                 |
+|                                       |                                 | `is_public`: 是否选择公开提问             | `true`, `false`                                         |
+|                                       |                                 | `with_image`: 是否附带图片                | `true`, `false`                                         |
+|                                       |                                 | `submit_status`: 提交结果                 | `success`, `fail`                                       |
+|                                       |                                 | `fail_reason`: 失败原因 (若失败)          | `network_error`, `content_violation`, `server_error`  |
+| 回复/互动通知的点击率                 | `click_notification`            | `notification_type`: 点击的通知类型       | `reply_received`, `new_comment`                         |
+|                                       |                                 | `target_item_id`: 通知指向的内容 ID (可选)  | `qa_123`                                                |
+
+**后台管理端埋点 (Admin-Side Tracking)**
+
+| 要统计的事件说明                      | 事件名 (Event Name)                 | 参数说明 (Parameter Description)           | 参数值 (Example Value)                                     |
+| ------------------------------------- | ---------------------------------- | --------------------------------------------- | ------------------------------------------------------ |
+| 互动管理模块访问次数 (PV/UV)        | `view_admin_interaction_module`    | `tab_name`: 当前查看的子标签页 (可选)         | `pending_questions`, `published_content`, `users`      |
+| 问题列表筛选/排序使用次数             | `filter_sort_question_list`      | `filter_criteria`: 筛选条件                 | `status:pending`, `is_public:true`                     |
+|                                       |                                    | `sort_by`: 排序字段                         | `time_desc`, `hotness_asc`                             |
+| 问题处理操作次数 (回复/公开/忽略等)   | `action_question`                  | `question_id`: 操作的问题 ID                  | `q_abc`                                                |
+|                                       |                                    | `action_type`: 操作类型                       | `reply`, `set_public`, `set_private`, `ignore`, `delete` |
+|                                       |                                    | `reply_type`: 回复类型 (若回复)             | `text`, `voice`, `image`                               |
+| 主动发起互动次数 (话题/动态/投票)   | `create_content`                   | `content_id`: 创建成功后的内容 ID (若有)    | `topic_456`                                            |
+|                                       |                                    | `content_type`: 创建的内容类型                | `topic`, `post`, `vote`                                |
+| 已发布内容管理操作次数 (编辑/删除等) | `action_published_content`         | `content_id`: 操作的内容 ID                   | `topic_456`, `post_789`, `qa_123`                      |
+|                                       |                                    | `content_type`: 操作的内容类型                | `qa`, `topic`, `post`, `vote`                          |
+|                                       |                                    | `action_type`: 操作类型                       | `edit`, `delete`, `pin`, `unpin`                         |
+| 评论管理操作次数 (精选/删除)        | `action_comment`                   | `comment_id`: 操作的评论 ID                   | `cmt_xyz`                                              |
+|                                       |                                    | `content_id`: 评论所属内容 ID               | `qa_123`, `topic_456`                                  |
+|                                       |                                    | `action_type`: 操作类型                       | `select`, `unselect`, `delete`                           |
+| 用户管理操作次数 (禁言/解禁)        | `action_user`                      | `user_id`: 操作的用户 ID                      | `openid_123`                                           |
+|                                       |                                    | `action_type`: 操作类型                       | `ban`, `unban`                                         |
 
 ### 8. 总结 (Summary)
 
